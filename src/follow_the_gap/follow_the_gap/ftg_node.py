@@ -126,61 +126,77 @@ def find_largest_gap(gaps: List[Gap]) -> Optional[Gap]:
 
 
 def calculate_gap_center_angle(gap: Gap) -> float:
-    """Calculate the center angle of a gap using the paper's formula."""
+    """Calculate the center angle of a gap using the paper's formula.
+
+    Variable naming follows the original C++ implementation:
+    d_1 = obstacle_right.distance, d_2 = obstacle_left.distance,
+    theta_1 = |angle_right|, theta_2 = |angle_left|.
+    """
     if gap.obstacle_left is None or gap.obstacle_right is None:
         return 0.0
 
-    d1 = gap.obstacle_left.distance
-    d2 = gap.obstacle_right.distance
-    theta1 = abs(gap.angle_left)
-    theta2 = abs(gap.angle_right)
+    d_1 = gap.obstacle_right.distance
+    d_2 = gap.obstacle_left.distance
+    theta_1 = abs(gap.angle_right)
+    theta_2 = abs(gap.angle_left)
+
+    fallback = (gap.angle_right + gap.angle_left) / 2.0
 
     try:
         # Case 1: gap straddles zero (left >= 0, right <= 0)
         if gap.angle_left >= 0.0 and gap.angle_right <= 0.0:
-            cos_sum = math.cos(theta1 + theta2)
-            denom_sq = d1 * d1 + d2 * d2 + 2.0 * d1 * d2 * cos_sum
+            cos_sum = math.cos(theta_1 + theta_2)
+            denom_sq = d_1 * d_1 + d_2 * d_2 + 2.0 * d_1 * d_2 * cos_sum
             if denom_sq <= 0.0:
-                return (gap.angle_right + gap.angle_left) / 2.0
+                return fallback
             denom = math.sqrt(denom_sq)
-            arg = (d1 + d2 * cos_sum) / denom
+            arg = (d_1 + d_2 * cos_sum) / denom
             arg = max(-1.0, min(1.0, arg))
-            return math.acos(arg) - theta1
+            theta_gap_c = math.acos(arg) - theta_1
+            if math.isnan(theta_gap_c):
+                return fallback
+            return theta_gap_c
 
         # Case 2: both angles positive (gap entirely on the left)
         if gap.angle_right >= 0.0:
-            l_squared = d1 * d1 + d2 * d2 - 2.0 * d1 * d2 * math.cos(theta1 - theta2)
-            if l_squared <= 0.0:
-                return (gap.angle_right + gap.angle_left) / 2.0
-            h_squared = d1 * d1 - (l_squared / 4.0)
+            l_squared = (d_1 * d_1 + d_2 * d_2
+                         - 2.0 * d_1 * d_2 * math.cos(theta_2 - theta_1)) / 4.0
+            h_squared = (d_1 * d_1 + d_2 * d_2 - 2.0 * l_squared) / 2.0
             if h_squared < 0.0:
-                return (gap.angle_right + gap.angle_left) / 2.0
+                return fallback
             h = math.sqrt(h_squared)
-            l = math.sqrt(l_squared)
             if h == 0.0:
-                return (gap.angle_right + gap.angle_left) / 2.0
-            theta_x = math.atan(l / (2.0 * h))
-            return theta1 - theta_x
+                return fallback
+            arg = (h_squared + d_1 * d_1 - l_squared) / (2.0 * h * d_1)
+            arg = max(-1.0, min(1.0, arg))
+            theta_x = math.acos(arg)
+            theta_gap_c = theta_1 + theta_x
+            if math.isnan(theta_gap_c):
+                return fallback
+            return theta_gap_c
 
         # Case 3: both angles negative (gap entirely on the right)
         if gap.angle_left <= 0.0:
-            l_squared = d1 * d1 + d2 * d2 - 2.0 * d1 * d2 * math.cos(theta2 - theta1)
-            if l_squared <= 0.0:
-                return (gap.angle_right + gap.angle_left) / 2.0
-            h_squared = d2 * d2 - (l_squared / 4.0)
+            l_squared = (d_1 * d_1 + d_2 * d_2
+                         - 2.0 * d_1 * d_2 * math.cos(theta_1 - theta_2)) / 4.0
+            h_squared = (d_1 * d_1 + d_2 * d_2 - 2.0 * l_squared) / 2.0
             if h_squared < 0.0:
-                return (gap.angle_right + gap.angle_left) / 2.0
+                return fallback
             h = math.sqrt(h_squared)
-            l = math.sqrt(l_squared)
             if h == 0.0:
-                return (gap.angle_right + gap.angle_left) / 2.0
-            theta_x = math.atan(l / (2.0 * h))
-            return -(theta2 - theta_x)
+                return fallback
+            arg = (h_squared + d_2 * d_2 - l_squared) / (2.0 * h * d_2)
+            arg = max(-1.0, min(1.0, arg))
+            theta_x = math.acos(arg)
+            theta_gap_c = -(theta_2 + theta_x)
+            if math.isnan(theta_gap_c):
+                return fallback
+            return theta_gap_c
 
     except (ValueError, ZeroDivisionError):
         pass
 
-    return (gap.angle_right + gap.angle_left) / 2.0
+    return fallback
 
 
 def calculate_final_heading_angle(
