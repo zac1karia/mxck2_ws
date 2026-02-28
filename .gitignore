@@ -4,3 +4,4 @@ log/
 **/__pycache__/
 src/mxck_run/bagfiles/
 !src/mxck_run/bagfiles/ros2_bag_conversion.yaml
+_codeql_detected_source_root
