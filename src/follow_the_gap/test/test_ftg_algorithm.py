@@ -42,7 +42,7 @@ class TestObstacle:
         assert o.radius == 0.5 - 0.01
 
     def test_from_cartesian(self):
-        o = Obstacle.from_cartesian(1.0, 1.0, 0.3, 0.4)
+        o = Obstacle.from_cartesian(1.0, 1.0, 0.3)
         expected_dist = math.hypot(1.0, 1.0)
         assert math.isclose(o.distance_to_center, expected_dist)
         assert math.isclose(o.angle, math.atan2(1.0, 1.0))

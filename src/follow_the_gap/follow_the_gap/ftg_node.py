@@ -35,7 +35,7 @@ class Obstacle:
         return o
 
     @staticmethod
-    def from_cartesian(x: float, y: float, radius: float, car_radius: float) -> 'Obstacle':
+    def from_cartesian(x: float, y: float, radius: float) -> 'Obstacle':
         """Create obstacle from Cartesian coordinates."""
         o = Obstacle()
         o.x = x
