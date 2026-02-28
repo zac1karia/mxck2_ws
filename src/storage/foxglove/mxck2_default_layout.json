@@ -1,0 +1,75 @@
+{
+  "configById": {
+    "3D!main": {
+      "followTf": "base_link",
+      "cameraState": {
+        "perspective": false,
+        "distance": 10,
+        "phi": 0,
+        "theta": 0,
+        "target": [0, 0, 0],
+        "targetOrientation": [0, 0, 0, 1],
+        "fovy": 0.75,
+        "near": 0.01,
+        "far": 5000
+      },
+      "topics": {
+        "/scan": {
+          "visible": true,
+          "pointSize": 3,
+          "colorMode": "flat",
+          "flatColor": "#00FF00"
+        },
+        "/camera/camera/color/image_raw": {
+          "visible": false
+        },
+        "/camera/color/image_jpeg": {
+          "visible": false
+        },
+        "/tf": {
+          "visible": true
+        },
+        "/tf_static": {
+          "visible": true
+        }
+      }
+    },
+    "Image!camera": {
+      "topic": "/camera/color/image_jpeg",
+      "visible": true
+    },
+    "Plot!drive": {
+      "paths": [
+        {
+          "value": "$.drive.speed",
+          "topic": "/autonomous/ackermann_cmd",
+          "enabled": true,
+          "timestampMethod": "receiveTime",
+          "color": "#4e98e2"
+        },
+        {
+          "value": "$.drive.steering_angle",
+          "topic": "/autonomous/ackermann_cmd",
+          "enabled": true,
+          "timestampMethod": "receiveTime",
+          "color": "#e29a4e"
+        }
+      ],
+      "minYValue": -1,
+      "maxYValue": 1,
+      "showLegend": true
+    }
+  },
+  "globalVariables": {},
+  "layout": {
+    "direction": "row",
+    "first": "3D!main",
+    "second": {
+      "direction": "column",
+      "first": "Image!camera",
+      "second": "Plot!drive",
+      "splitPercentage": 60
+    },
+    "splitPercentage": 65
+  }
+}

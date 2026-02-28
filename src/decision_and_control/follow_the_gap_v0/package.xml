@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+
+	<name>follow_the_gap_v0</name>
+	<version>0.2.4</version>
+	<description>
+		Follow The Gap algorithm implementation.
+		See 'README.md' for more information.
+	</description>
+	<maintainer email="klapajar@fel.cvut.cz">Jaroslav Klapálek</maintainer>
+	<license>Apache License 2.0</license>
+	<author email="anderssp1994@gmail.com">Anders Solberg Pedersen</author>
+	<author email="klapajar@fel.cvut.cz">Jaroslav Klapálek</author>
+
+	<buildtool_depend>ament_cmake</buildtool_depend>
+
+	<build_depend>std_msgs</build_depend>
+	<build_depend>sensor_msgs</build_depend>
+	<build_depend>visualization_msgs</build_depend>
+	<build_depend>geometry_msgs</build_depend>
+	<build_depend>obstacle_msgs</build_depend>
+
+	<depend>rclcpp</depend>
+
+	<depend>tf2_geometry_msgs</depend>
+
+	<exec_depend>std_msgs</exec_depend>
+	<exec_depend>sensor_msgs</exec_depend>
+	<exec_depend>visualization_msgs</exec_depend>
+	<exec_depend>geometry_msgs</exec_depend>
+	<exec_depend>obstacle_msgs</exec_depend>
+
+	<export>
+		<build_type>ament_cmake</build_type>
+	</export>
+
+</package>

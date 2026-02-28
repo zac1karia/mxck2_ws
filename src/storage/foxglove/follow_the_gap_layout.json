@@ -1,0 +1,54 @@
+{
+  "configById": {
+    "3D!main": {
+      "followTf": "base_link",
+      "layers": {
+        "map": {
+          "type": "foxglove.OccupancyGrid",
+          "visible": true
+        }
+      },
+      "cameraState": {
+        "perspective": false,
+        "distance": 20,
+        "phi": 0,
+        "theta": 0,
+        "target": [0, 0, 0],
+        "targetOrientation": [0, 0, 0, 1],
+        "fovy": 0.75,
+        "near": 0.01,
+        "far": 5000
+      },
+      "topics": {
+        "/scan": {
+          "visible": true,
+          "pointSize": 3,
+          "colorMode": "flat",
+          "flatColor": "#00FF00"
+        },
+        "/obstacles": {
+          "visible": true,
+          "colorMode": "flat",
+          "flatColor": "#FF0000"
+        },
+        "/visualize_obstacles": {
+          "visible": true
+        },
+        "/tf": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "globalVariables": {},
+  "layout": {
+    "direction": "row",
+    "first": "3D!main",
+    "second": {
+      "direction": "column",
+      "first": "Plot!speed",
+      "second": "RawMessages!ftg"
+    },
+    "splitPercentage": 70
+  }
+}
