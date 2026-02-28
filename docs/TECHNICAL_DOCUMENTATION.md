@@ -38,7 +38,7 @@ MXCarkit ist eine modulare, ROS 2-basierte Roboterfahrzeug-Plattform, die auf ei
 - **ROS-Distribution**: ROS 2 Humble Hawksbill (LTS)
 - **Betriebssystem**: Ubuntu 22.04 (Jammy) / Ubuntu L4T (Linux for Tegra)
 - **Status**: Aktive Entwicklung mit stabilem Core-Stack (`mxck2_ws`) und separatem GPU-Workspace (`development_ws`)
-- **Versionierung**: Zwei Packages auf Version `0.0.0` – frühe, aber funktionale Phase
+- **Versionierung**: `mxck_run` und `vehicle_control` auf Version `0.0.0` – frühe, aber funktionale Phase
 
 ---
 
@@ -390,7 +390,7 @@ self.steer_mapping = get_interp(
 )
 
 # Geschwindigkeit: Deadzone → 0, darüber/darunter Mindestgeschwindigkeit
-speed_min = erpm_min / speed_to_erpm_gain  # ≈ 0.185 m/s
+speed_min = erpm_min / speed_to_erpm_gain  # 700 / 3786 ≈ 0.1849 m/s
 
 self.speed_mapping = get_interp(
     (-1.0, -joy_deadzone, -joy_deadzone+ε, joy_deadzone-ε, joy_deadzone, 1.0),
@@ -495,11 +495,11 @@ ackermann_to_vesc: # Nur für ackermann_to_vesc
 
 Der `ackermann_to_vesc`-Node implementiert drei Fahrmodi:
 
-| Modus | RC-Wert | Joy-Werte | Beschreibung |
-|-------|---------|-----------|-------------|
-| **Deadman** | 0 | btn[4]=0, btn[5]=0 | Keine Fahrt – Sicherheitsmodus |
-| **Autonomous** | 1 | btn[4]=0, btn[5]=1 | Autonome Steuerung aktiv |
-| **Manual** | 2 | btn[4]=1, btn[5]=0 oder 1 | Manuelle Steuerung aktiv |
+| Modus | RC-Wert | Joy-Wert | Joy-Buttons | Beschreibung |
+|-------|---------|----------|-------------|-------------|
+| **Deadman** | 0 | 0 | btn[4]=0, btn[5]=0 | Keine Fahrt – Sicherheitsmodus |
+| **Manual** | 2 | 1 | btn[4]=1, btn[5]=0 oder 1 | Manuelle Steuerung aktiv |
+| **Autonomous** | 1 | 2 | btn[4]=0, btn[5]=1 | Autonome Steuerung aktiv |
 
 **Joystick Mode-Matrix** (2×2):
 
@@ -656,7 +656,7 @@ FROM ultralytics/ultralytics:latest-jetson-jetpack5
 ```
 
 **Enthält**:
-- ROS 2 Foxy (auf Jetson wegen CUDA-Kompatibilität)
+- ROS 2 Foxy (statt Humble, da die Ultralytics-Jetson-Base auf Ubuntu 20.04 basiert und Humble Ubuntu 22.04 erfordert)
 - librealsense (aus Source kompiliert)
 - micro-ROS, VESC, RPLIDAR Workspaces
 - vision_msgs (humble Branch für neuere Message-Typen)
