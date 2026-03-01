@@ -1,0 +1,11 @@
+follow_the_gap_node:
+  ros__parameters:
+    max_range: 3.0
+    fov_angle_max: 1.767  # pi/2 + pi/16
+    car_radius: 0.4
+    gap_weight_coefficient: 100.0
+    goal_angle: 0.0
+    max_speed: 1.0
+    min_speed: 0.5
+    steering_gain: 1.0
+    max_steering_angle: 0.44
